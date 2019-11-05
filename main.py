@@ -4,17 +4,21 @@ import time as tm
 
 # setup
 
+# pins for controlling motor speed
 leftPwmPin = port.PA12
 rightPwmPin = port.PA11
 
+# pins for controlling motor direction
 leftForwardPin = port.PG7
 leftReversePin = port.PG6
 rightForwardPin = port.PA0
 rightReversePin = port.PA1
 
-triggerPin = port.PA15
-echoPin = port.PA16
+# pins for communication with the ultrasonic sensor
+triggerPin = port.PA15 # output
+echoPin = port.PA16 # input
 
+# gpio configuration
 gpio.init()
 gpio.setcfg(leftForwardPin, gpio.OUTPUT)
 gpio.setcfg(leftReversePin, gpio.OUTPUT)
