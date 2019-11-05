@@ -59,7 +59,7 @@ def brake():
 
 def distance():
 	gpio.output(triggerPin, gpio.HIGH)
-	tm.sleep(0.02)
+	tm.sleep(0.01)
 	gpio.output(triggerPin, gpio.LOW)
 
 	while gpio.input(echoPin) == gpio.LOW:
@@ -68,12 +68,12 @@ def distance():
 	while gpio.input(echoPin) == gpio.HIGH:
 		pass
 	deltaTime = tm.time() - oldTime
-	print(deltaTime * 343)
+	return deltaTime/2 * 343
 
 # main loop
 
 while True:
 	tm.sleep(1)
-	distance()
+	print(distance())
 	pass
 
