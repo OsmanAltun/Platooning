@@ -18,21 +18,32 @@ rightReversePin = port.PA1
 triggerPin = port.PA15 # output
 echoPin = port.PA16 # input
 
+# pins for communication with the line sensor
+leftLineSensorPin = port.PA13
+rightLineSensorPin = port.PA10
+
 # gpio configuration
 gpio.init()
+#motor
 gpio.setcfg(leftForwardPin, gpio.OUTPUT)
 gpio.setcfg(leftReversePin, gpio.OUTPUT)
 gpio.setcfg(rightForwardPin, gpio.OUTPUT)
 gpio.setcfg(rightReversePin, gpio.OUTPUT)
+#ultrasonic
 gpio.setcfg(triggerPin, gpio.OUTPUT)
 gpio.setcfg(echoPin, gpio.INPUT)
+#linesensor
+gpio.setcfg(leftLineSensorPin, gpio.INPUT)
+gpio.setcfg(rightLineSensorPin, gpio.INPUT)
+
+
 leftPwm = OrangePwm(500, leftPwmPin)
 rightPwm = OrangePwm(500, rightPwmPin)
 leftPwm.start(0)
 rightPwm.start(0)
 
 # functions
-
+# car functions
 def forward(leftSpeed, rightSpeed):
 	leftPwm.changeDutyCycle(leftSpeed)
 	rightPwm.changeDutyCycle(rightSpeed)
@@ -57,7 +68,9 @@ def brake():
 	gpio.output(rightForwardPin, False)
 	gpio.output(rightReversePin, False)
 
-def distance():
+# Sensors
+
+def readUltrasonicSensor():
 	gpio.output(triggerPin, gpio.HIGH)
 	tm.sleep(0.01)
 	gpio.output(triggerPin, gpio.LOW)
@@ -69,6 +82,12 @@ def distance():
 		pass
 	deltaTime = tm.time() - oldTime
 	return deltaTime/2 * 343
+
+def readLineSensor():
+	return gpio.input(leftLineSensorPin), gpio.input(rightLineSensorPin) 
+
+
+
 
 # main loop
 
