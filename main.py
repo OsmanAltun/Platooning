@@ -2,49 +2,57 @@ from pyA20.gpio import gpio, port
 from orangepwm import *
 import time as tm
 
-# setup
-
-# pins for controlling motor speed
+# motor speed pins
 leftPwmPin = port.PA12
 rightPwmPin = port.PA11
 
-# pins for controlling motor direction
+# motor direction pins
 leftForwardPin = port.PG7
 leftReversePin = port.PG6
 rightForwardPin = port.PA0
 rightReversePin = port.PA1
 
-# pins for communication with the ultrasonic sensor
+# ultrasonic sensor pins
 triggerPin = port.PA15 # output
 echoPin = port.PA16 # input
 
-# pins for communication with the line sensor
+# line sensor pins
 leftLineSensorPin = port.PA13
 rightLineSensorPin = port.PA10
 
-# gpio configuration
+# initialize gpio library
 gpio.init()
-#motor
+
+# motor configuration
 gpio.setcfg(leftForwardPin, gpio.OUTPUT)
 gpio.setcfg(leftReversePin, gpio.OUTPUT)
 gpio.setcfg(rightForwardPin, gpio.OUTPUT)
 gpio.setcfg(rightReversePin, gpio.OUTPUT)
-#ultrasonic
-gpio.setcfg(triggerPin, gpio.OUTPUT)
-gpio.setcfg(echoPin, gpio.INPUT)
-#linesensor
-gpio.setcfg(leftLineSensorPin, gpio.INPUT)
-gpio.setcfg(rightLineSensorPin, gpio.INPUT)
-
-
 leftPwm = OrangePwm(500, leftPwmPin)
 rightPwm = OrangePwm(500, rightPwmPin)
 leftPwm.start(0)
 rightPwm.start(0)
 
+# ultrasonic sensor configuration
+gpio.setcfg(triggerPin, gpio.OUTPUT)
+gpio.setcfg(echoPin, gpio.INPUT)
+
+# line sensor configuration
+gpio.setcfg(leftLineSensorPin, gpio.INPUT)
+gpio.setcfg(rightLineSensorPin, gpio.INPUT)
+
+
+
 # functions
-# car functions
+
 def forward(leftSpeed, rightSpeed):
+	"""
+		Function sets speed of both dc motors and drives forward.
+
+		Args:
+		  leftSpeed: A number between 0 and 100
+		  rightSpeed: A number between 0 and 100
+	"""
 	leftPwm.changeDutyCycle(leftSpeed)
 	rightPwm.changeDutyCycle(rightSpeed)
 	gpio.output(leftForwardPin, True)
@@ -53,6 +61,13 @@ def forward(leftSpeed, rightSpeed):
 	gpio.output(rightReversePin, False)
 
 def reverse(leftSpeed, rightSpeed):
+	"""
+		Function sets speed of both dc motors and drives backward.
+		
+		Args:
+			leftSpeed: A number between 0 and 100
+			rightSpeed: A number between 0 and 100
+	"""
 	leftPwm.changeDutyCycle(leftSpeed)
 	rightPwm.changeDutyCycle(rightSpeed)
 	gpio.output(leftForwardPin, False)
@@ -61,6 +76,7 @@ def reverse(leftSpeed, rightSpeed):
 	gpio.output(rightReversePin, True)
 
 def brake():
+	"""Function stops the motors"""
 	leftPwm.changeDutyCycle(0)
 	rightPwm.changeDutyCycle(0)
 	gpio.output(leftForwardPin, False)
@@ -68,9 +84,13 @@ def brake():
 	gpio.output(rightForwardPin, False)
 	gpio.output(rightReversePin, False)
 
-# Sensors
-
 def readUltrasonicSensor():
+	"""
+		Function reads ultrasonic sensor
+
+		Returns:
+			Distance in meters
+	"""
 	gpio.output(triggerPin, gpio.HIGH)
 	tm.sleep(0.01)
 	gpio.output(triggerPin, gpio.LOW)
@@ -83,7 +103,13 @@ def readUltrasonicSensor():
 	deltaTime = tm.time() - oldTime
 	return deltaTime/2 * 343
 
-def readLineSensor():
+def readLineSensors():
+	"""
+		Function reads line sensors
+
+		Returns:
+			A tuple containing booleans
+	"""
 	return gpio.input(leftLineSensorPin), gpio.input(rightLineSensorPin) 
 
 
@@ -93,6 +119,6 @@ def readLineSensor():
 
 while True:
 	tm.sleep(1)
-	print(distance())
+	print(readUltrasonicSensor())
 	pass
 
