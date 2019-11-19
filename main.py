@@ -63,7 +63,7 @@ def forward(leftSpeed, rightSpeed):
 def reverse(leftSpeed, rightSpeed):
 	"""
 		Function sets speed of both dc motors and drives backward.
-		
+
 		Args:
 			leftSpeed: A number between 0 and 100
 			rightSpeed: A number between 0 and 100
@@ -77,8 +77,8 @@ def reverse(leftSpeed, rightSpeed):
 
 def brake():
 	"""Function stops the motors"""
-	leftPwm.changeDutyCycle(0)
-	rightPwm.changeDutyCycle(0)
+	#leftPwm.changeDutyCycle(0)
+	#rightPwm.changeDutyCycle(0)
 	gpio.output(leftForwardPin, False)
 	gpio.output(leftReversePin, False)
 	gpio.output(rightForwardPin, False)
@@ -110,7 +110,7 @@ def readLineSensors():
 		Returns:
 			A tuple containing booleans
 	"""
-	return gpio.input(leftLineSensorPin), gpio.input(rightLineSensorPin) 
+	return gpio.input(leftLineSensorPin), gpio.input(rightLineSensorPin)
 
 
 
@@ -119,6 +119,8 @@ def readLineSensors():
 
 while True:
 	tm.sleep(1)
-	print(readUltrasonicSensor())
-	pass
+	if all(x==1 for x in readLineSensors()):
+		forward(50, 50)
+	else:
+		brake()
 
