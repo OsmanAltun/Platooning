@@ -25,3 +25,17 @@ def executeQuery(queryString):
         results = "error"
     return results
 
+def updateCar(carId, leftSpeed, rightSpeed, leftLineSensor, rightLineSensor, ultrasonicSensor):
+    executeQuery(f"""
+    UPDATE cars
+    SET leftSpeed={leftSpeed},
+        rightSpeed={rightSpeed},
+        leftLineSensor={leftLineSensor},
+        rightLineSensor={rightLineSensor},
+        ultrasonicSensor={ultrasonicSensor}
+    WHERE
+        carId = {carId}
+    """)
+
+def getAll():
+    return executeQuery("select * from cars")
