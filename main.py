@@ -119,6 +119,6 @@ def readLineSensors():
 
 while True:
 	tm.sleep(1)
-	print(readUltrasonicSensor())
+	print(readUltrasonicSensors())
 	pass
 
