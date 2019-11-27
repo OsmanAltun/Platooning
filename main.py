@@ -77,8 +77,8 @@ def reverse(leftSpeed, rightSpeed):
 
 def brake():
 	"""Function stops the motors"""
-	#leftPwm.changeDutyCycle(0)
-	#rightPwm.changeDutyCycle(0)
+	leftPwm.changeDutyCycle(0)
+	rightPwm.changeDutyCycle(0)
 	gpio.output(leftForwardPin, False)
 	gpio.output(leftReversePin, False)
 	gpio.output(rightForwardPin, False)
