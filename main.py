@@ -52,7 +52,7 @@ def move(leftSpeed, rightSpeed):
 	if leftSpeed > 0:
 		gpio.output(leftForwardPin, True)
 		gpio.output(leftReversePin, False)
-	if leftSpeed == 0:
+	elif leftSpeed == 0:
 		gpio.output(leftForwardPin, False)
 		gpio.output(leftReversePin, False)
 	else:
@@ -62,7 +62,7 @@ def move(leftSpeed, rightSpeed):
 	if rightSpeed > 0:
 		gpio.output(rightForwardPin, True)
 		gpio.output(rightReversePin, False)
-	if rightSpeed == 0:
+	elif rightSpeed == 0:
 		gpio.output(rightForwardPin, False)
 		gpio.output(rightReversePin, False)
 	else:
