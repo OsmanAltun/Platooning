@@ -1,15 +1,19 @@
 import requests
 import json
 
+url = "https://192.168.1.6:3000/api/cars"
 
 def getData():
-    ship_api_url = "URL"
-    request_data = requests.get(ship_api_url)
+    global url
+    request_data = requests.get(url, verify=False)
     return request_data.json()
 
-def postData(car):
-    url = 'URL'
+def updateData(car):
+    global url
     payload = car
     headers = {'content-type': 'application/json'}
-    r = requests.post(url, data=json.dumps(payload), headers=headers)
+    r = requests.put(url, data=json.dumps(payload), headers=headers, verify=False)
     return r.status_code
+
+
+print(getData())
