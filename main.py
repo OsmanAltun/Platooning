@@ -104,11 +104,13 @@ def readLineSensors():
 
 # main loop
 
-oldData = db.getData()["id" ==  1]
+data = db.getData()["id" ==  1]
+move(data["leftspeed"], data["rightspeed"])
+
 while True:
 	tm.sleep(1)
 	newData = db.getData()["id" == 1]
 
-	if newData != oldData:
-		oldData = newData
+	if newData != data:
+		data = newData
 		move(newData["leftspeed"], newData["rightspeed"])
