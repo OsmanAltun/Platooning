@@ -3,6 +3,8 @@ from orangepwm import *
 import time as tm
 import database as db
 
+carId = 1
+
 # motor speed pins
 leftPwmPin = port.PA12
 rightPwmPin = port.PA11
@@ -42,10 +44,7 @@ gpio.setcfg(echoPin, gpio.INPUT)
 gpio.setcfg(leftLineSensorPin, gpio.INPUT)
 gpio.setcfg(rightLineSensorPin, gpio.INPUT)
 
-
-
 # functions
-
 def move(leftSpeed, rightSpeed):
 	leftPwm.changeDutyCycle(abs(leftSpeed))
 	rightPwm.changeDutyCycle(abs(rightSpeed))
@@ -103,13 +102,11 @@ def readLineSensors():
 
 
 # main loop
-
-data = db.getData()["id" ==  1]
+data = db.getData()["id" ==  carId]
 move(data["leftspeed"], data["rightspeed"])
 
 while True:
-	tm.sleep(1)
-	newData = db.getData()["id" == 1]
+	newData = db.getData()["id" == carId]
 
 	if newData != data:
 		data = newData

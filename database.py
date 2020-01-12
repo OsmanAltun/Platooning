@@ -14,8 +14,3 @@ def updateData(car):
     headers = {'content-type': 'application/json'}
     r = requests.put(url, data=json.dumps(payload), headers=headers, verify=False)
     return r.status_code
-
-
-updateData({"id":1, "leftspeed":50, "rightspeed":50, "leftlinesensor":False, "rightlinesensor":False, "ultrasonicsensor":0})
-
-print(getData())
