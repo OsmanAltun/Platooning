@@ -48,7 +48,7 @@ gpio.setcfg(rightLineSensorPin, gpio.INPUT)
 def move(leftSpeed, rightSpeed):
 	""" 
 		Forward: value > 0 (max 100)
-		Reverse: value < 0 (max -100)
+		Reverse: value < 0 (min -100)
 		Brake: value == 0
 	"""
 	leftPwm.changeDutyCycle(abs(leftSpeed))
