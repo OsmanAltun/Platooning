@@ -1,6 +1,7 @@
 from pyA20.gpio import gpio, port
 from orangepwm import *
 import time as tm
+import database as db
 
 # motor speed pins
 leftPwmPin = port.PA12
@@ -45,44 +46,30 @@ gpio.setcfg(rightLineSensorPin, gpio.INPUT)
 
 # functions
 
-def forward(leftSpeed, rightSpeed):
-	"""
-		Function sets speed of both dc motors and drives forward.
+def move(leftSpeed, rightSpeed):
+	leftPwm.changeDutyCycle(abs(leftSpeed))
+	rightPwm.changeDutyCycle(abs(rightSpeed))
+	
+	if leftSpeed > 0:
+		gpio.output(leftForwardPin, True)
+		gpio.output(leftReversePin, False)
+	if leftSpeed == 0:
+		gpio.output(leftForwardPin, False)
+		gpio.output(leftReversePin, False)
+	else:
+		gpio.output(leftForwardPin, False)
+		gpio.output(leftReversePin, True)
+	
+	if rightSpeed > 0:
+		gpio.output(rightForwardPin, True)
+		gpio.output(rightReversePin, False)
+	if rightSpeed == 0:
+		gpio.output(rightForwardPin, False)
+		gpio.output(rightReversePin, False)
+	else:
+		gpio.output(rightForwardPin, False)
+		gpio.output(rightReversePin, True)
 
-		Args:
-		  leftSpeed: A number between 0 and 100
-		  rightSpeed: A number between 0 and 100
-	"""
-	leftPwm.changeDutyCycle(leftSpeed)
-	rightPwm.changeDutyCycle(rightSpeed)
-	gpio.output(leftForwardPin, True)
-	gpio.output(leftReversePin, False)
-	gpio.output(rightForwardPin, True)
-	gpio.output(rightReversePin, False)
-
-def reverse(leftSpeed, rightSpeed):
-	"""
-		Function sets speed of both dc motors and drives backward.
-
-		Args:
-			leftSpeed: A number between 0 and 100
-			rightSpeed: A number between 0 and 100
-	"""
-	leftPwm.changeDutyCycle(leftSpeed)
-	rightPwm.changeDutyCycle(rightSpeed)
-	gpio.output(leftForwardPin, False)
-	gpio.output(leftReversePin, True)
-	gpio.output(rightForwardPin, False)
-	gpio.output(rightReversePin, True)
-
-def brake():
-	"""Function stops the motors"""
-	leftPwm.changeDutyCycle(0)
-	rightPwm.changeDutyCycle(0)
-	gpio.output(leftForwardPin, False)
-	gpio.output(leftReversePin, False)
-	gpio.output(rightForwardPin, False)
-	gpio.output(rightReversePin, False)
 
 def readUltrasonicSensor():
 	"""
@@ -117,10 +104,11 @@ def readLineSensors():
 
 # main loop
 
+oldData = db.getData()["id" ==  1]
 while True:
 	tm.sleep(1)
-	if all(x==1 for x in readLineSensors()):
-		forward(50, 50)
-	else:
-		brake()
+	newData = db.getData()["id" == 1]
 
+	if newData != oldData:
+		oldData = newData
+		move(newData["leftspeed"], newData["rightspeed"])
