@@ -113,6 +113,9 @@ move(data["leftspeed"], data["rightspeed"])
 while True:
 	newData = db.getData(carId)
 
-	if newData != data:
-		data = newData
+	if newData["leftspeed"] != data["leftspeed"] or newData["rightspeed"] != data["rightspeed"]:
+		data["leftspeed"] = newData["leftspeed"]
+		data["rightspeed"] = newData["rightspeed"]
 		move(newData["leftspeed"], newData["rightspeed"])
+	
+	db.updateData(carId, newData["leftspeed"], newData["rightspeed"], readLineSensors()[0], readLineSensors()[1], readUltrasonicSensor())
