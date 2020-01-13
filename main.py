@@ -108,14 +108,16 @@ def readLineSensors():
 
 # main loop
 data = db.getData(carId)
-move(data["leftspeed"], data["rightspeed"])
+leftspeed = data["leftspeed"]
+rightspeed = data["rightspeed"]
 
 while True:
 	newData = db.getData(carId)
 
-	if newData["leftspeed"] != data["leftspeed"] or newData["rightspeed"] != data["rightspeed"]:
-		data["leftspeed"] = newData["leftspeed"]
-		data["rightspeed"] = newData["rightspeed"]
-		move(newData["leftspeed"], newData["rightspeed"])
+	if newData["leftspeed"] != leftspeed or newData["rightspeed"] != rightspeed:
+
+		leftspeed = newData["leftspeed"]
+		rightspeed = newData["rightspeed"]
+		move(leftspeed, rightspeed)
 	
 	db.updateData(carId, newData["leftspeed"], newData["rightspeed"], readLineSensors()[0], readLineSensors()[1], readUltrasonicSensor())
