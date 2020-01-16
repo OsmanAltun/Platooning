@@ -109,7 +109,7 @@ data = db.getData(carId)
 while True:
 	newData = db.getData(carId)
 
-	if data["leftspeed"] != newData["leftspeed"] or data["rightspeed"] != newData["rightspeed"]
+	if data["leftspeed"] != newData["leftspeed"] or data["rightspeed"] != newData["rightspeed"]:
 		move(newData["leftspeed"], newData["rightspeed"])
 		data = newData
 	
