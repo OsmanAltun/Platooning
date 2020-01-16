@@ -104,13 +104,18 @@ def readLineSensors():
 	return gpio.input(leftLineSensorPin), gpio.input(rightLineSensorPin)
 
 
-
-
 # main loop
-
+data = db.getData(carId)
 while True:
 	newData = db.getData(carId)
 
-	move(newData["leftspeed"], newData["rightspeed"])
+	if data["leftspeed"] != newData["leftspeed"] or data["rightspeed"] != newData["rightspeed"]
+		move(newData["leftspeed"], newData["rightspeed"])
+		data = newData
 	
-	db.updateData(carId, newData["leftspeed"], newData["rightspeed"], readLineSensors()[0], readLineSensors()[1], readUltrasonicSensor())
+	db.updateData({
+		"id": carId, 
+		"leftlinesensor": readLineSensors()[0], 
+		"rightlinesensor": readLineSensors()[1], 
+		"ultrasonicsensor": readUltrasonicSensor()
+	})

@@ -8,9 +8,9 @@ def getData(id=""):
     request_data = requests.get(url+str(id), verify=False)
     return request_data.json()
 
-def updateData(carId, leftspeed, rightspeed, leftlinesensor, rightlinesensor, ultrasonicsensor):
+def updateData(car):
     global url
-    payload = {"id":carId, "leftspeed":leftspeed, "rightspeed":rightspeed, "leftlinesensor":leftlinesensor, "rightlinesensor":rightlinesensor, "ultrasonicsensor":ultrasonicsensor}
+    payload = car
     headers = {'content-type': 'application/json'}
     r = requests.put(url, data=json.dumps(payload), headers=headers, verify=False)
     return r.status_code
