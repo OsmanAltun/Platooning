@@ -14,3 +14,13 @@ def updateData(car):
     headers = {'content-type': 'application/json'}
     r = requests.put(url, data=json.dumps(payload), headers=headers, verify=False)
     return r.status_code
+
+car = {
+    "id": 1,
+    "leftspeed": 30,
+    "rightspeed": 30,
+}
+
+updateData(car)
+
+print(getData(1))
