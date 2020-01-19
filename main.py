@@ -106,6 +106,8 @@ def readLineSensors():
 
 # main loop
 data = db.getData(carId)
+move(data["leftspeed"], data["rightspeed"])
+
 while True:
 	newData = db.getData(carId)
 
