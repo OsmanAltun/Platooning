@@ -114,15 +114,9 @@ while True:
 	if data["leftspeed"] != newData["leftspeed"] or data["rightspeed"] != newData["rightspeed"]:
 		move(newData["leftspeed"], newData["rightspeed"])
 		data = newData
-		db.updateData({
-			"id": carId,
-			"leftspeed": data["leftspeed"],
-			"rightspeed": data["rightspeed"]
-		})
 	
-	db.updateData({
-		"id": carId, 
+	db.updateData(newData.update({
 		"leftlinesensor": readLineSensors()[0], 
 		"rightlinesensor": readLineSensors()[1], 
 		"ultrasonicsensor": readUltrasonicSensor()
-	})
+	}))
